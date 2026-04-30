@@ -1,7 +1,7 @@
 # Assignment OCC2 Group 
 
 ## 1.1 Project Title
-WIX1002 FUNDAMENTALS OF PROGRAMMING - Topic 2: Smart Parking Management System
+WIA1002 Data Structures - Topic 2: Smart Parking Management System
 
 ## 1.2 Team Members
 1. Ammar Kapadia (24217261)
