@@ -17,8 +17,8 @@ import models.ParkingSlot;
  */
 public class CustomMinHeap {
 
-    public ParkingSlot[] heap;
-    public int size;
+    private ParkingSlot[] heap;
+    private int size;
     public static final int DEFAULT_CAPACITY = 11;
 
     public CustomMinHeap() {
@@ -29,7 +29,7 @@ public class CustomMinHeap {
     /**
      * Determines whether heap is empty.
      *
-     * @return whether or not heap is empty.
+     * @return whether or not heap is empty
      */
     public boolean isEmpty() {
         return size == 0;
@@ -38,7 +38,7 @@ public class CustomMinHeap {
     /**
      * Return size of heap.
      *
-     * @return size.
+     * @return size
      */
     public int size() {
         return size;
@@ -47,7 +47,7 @@ public class CustomMinHeap {
     /**
      * Adds a parking slot into heap.
      *
-     * @param newParkingSlot.
+     * @param newParkingSlot
      */
     public void offer(ParkingSlot newParkingSlot) {
         if (size >= heap.length) {
@@ -61,7 +61,7 @@ public class CustomMinHeap {
     /**
      * Remove and return the parking slot with the smallest distanceFromGate.
      *
-     * @return root of tree / parking slot with lowest distance from gate.
+     * @return root of tree / parking slot with lowest distance from gate
      */
     public ParkingSlot poll() {
         if (isEmpty()) {
