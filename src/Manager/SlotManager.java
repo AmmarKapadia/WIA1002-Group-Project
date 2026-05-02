@@ -8,6 +8,8 @@ import datastructures.CustomMinHeap;
 import models.ParkingSlot;
 
 /**
+ * This class is used to implement CustomMinHeap and give users the best parking
+ * slot (lowest distanceFromGate)
  *
  * @author Yim Zi Hao
  */
