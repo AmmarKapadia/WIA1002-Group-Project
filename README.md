@@ -12,7 +12,7 @@ This project corresponds to **Topic 5** of the assigned case studies.
 |---|---|
 | **Course Code** | WIA1002 |
 | **Course Name** | Data Structures |
-| **Lecturer** | Mr. Muhammad Lubani |
+| **Tutor** | Mr. Muhammad Lubani |
 | **Faculty** | Faculty of Computer Science and Information Technology (FCSIT) |
 | **University** | Universiti Malaya (UM) |
 | **Academic Session** | 2025/2026, Semester 2 |
@@ -24,11 +24,11 @@ This project corresponds to **Topic 5** of the assigned case studies.
 
 | No. | Name | Matric Number | Role / Module |
 |-----|------|---------------|---------------|
-| 1   |      |               |               |
-| 2   |      |               |               |
-| 3   |      |               |               |
-| 4   |      |               |               |
-| 5   |      |               |               |
+| 1   |Ammar Kapadia     |24217261       |Group Leader         |
+| 2   |Yim Zi Hao        |24210461       |Group Member         |
+| 3   |Nicolas Nicodemus |               |Group Member         |
+| 4   |Xu Zimao          |               |Group Member         |
+| 5   |Chengyang         |               |Group Member         |
 
 ---
 
@@ -93,9 +93,6 @@ SmartParkingSystem/
 │   └── Main.java            # Application entry point
 └── README.md
 ```
-
-> **Note:** The structure above reflects the intended layout. Update file names here if your final implementation differs.
-
 ---
 
 ## Getting Started
@@ -140,8 +137,6 @@ java -cp out Main
 
 ## Acknowledgements
 
-We would like to thank our lecturer, **Mr. Muhammad Lubani**, for his guidance throughout the WIA1002 Data Structures course, and the Faculty of Computer Science and Information Technology, Universiti Malaya, for providing the resources and learning environment for this project.
+We would like to thank our tutor and our demo, **Mr. Muhammad Lubani** & **Shahid Akhtar**, for their guidance throughout the WIA1002 Data Structures course, and the Faculty of Computer Science and Information Technology, Universiti Malaya, for providing the resources and learning environment for this project.
 
 ---
-
-*This project is submitted as part of the coursework requirement for WIA1002 Data Structures, Semester 2, Academic Session 2025/2026.*
