@@ -5,6 +5,7 @@ import models.Vehicle;
 
 /**
  * Binary Search Tree implementation for alphabetized vehicle storage and retrieval.
+ * @author XU ZIMAO
  */
 public class CustomBST {
     private class Node {
