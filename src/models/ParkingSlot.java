@@ -17,27 +17,33 @@ public class ParkingSlot {
     }
 
     // Basic Getters and Setters
-    public String getSlotID() { 
-        return slotID; 
-    }
-    
-    public void setSlotID(String slotID) { 
-        this.slotID = slotID; 
+    public String getSlotID() {
+        return slotID;
     }
 
-    public int getDistanceFromGate() { 
-        return distanceFromGate; 
-    }
-    
-    public void setDistanceFromGate(int distanceFromGate) { 
-        this.distanceFromGate = distanceFromGate; 
+    public void setSlotID(String slotID) {
+        this.slotID = slotID;
     }
 
-    public boolean isOccupied() { 
-        return isOccupied; 
+    public int getDistanceFromGate() {
+        return distanceFromGate;
     }
-    
-    public void setOccupied(boolean occupied) { 
-        this.isOccupied = occupied; 
+
+    public void setDistanceFromGate(int distanceFromGate) {
+        this.distanceFromGate = distanceFromGate;
+    }
+
+    public boolean isOccupied() {
+        return isOccupied;
+    }
+
+    public void setOccupied(boolean occupied) {
+        this.isOccupied = occupied;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Slot %-4s (%2dm from gate) - %s",
+                slotID, distanceFromGate, isOccupied ? "OCCUPIED" : "AVAILABLE");
     }
 }

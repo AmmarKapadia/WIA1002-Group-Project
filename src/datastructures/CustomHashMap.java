@@ -9,11 +9,10 @@ import models.Vehicle;
 public class CustomHashMap {
     // Basic inner class to represent a node in the linked list
     private class HashNode {
-        private String key; 
+        private String key;
         private Vehicle value;
         private HashNode next;
 
-        //Inner Class Constructor
         public HashNode(String key, Vehicle value) {
             this.key = key;
             this.value = value;
@@ -32,7 +31,7 @@ public class CustomHashMap {
 
     /**
      * Standard hash function mapping the string to a valid array index.
-     * Uses Java's built in Math.abs to prevent negative indices.
+     * Uses Math.abs to prevent negative indices.
      */
     private int hashFunction(String key) {
         return Math.abs(key.hashCode() % tableSize);
@@ -50,8 +49,7 @@ public class CustomHashMap {
         HashNode head = table[index];
         HashNode current = head;
 
-        // Step 1: Linear search to see if the key already exists.
-        // If it does, just update the value and exit.
+        // Update path: key already in chain
         while (current != null) {
             if (current.key.equals(key)) {
                 current.value = value;
@@ -59,9 +57,8 @@ public class CustomHashMap {
             }
             current = current.next;
         }
-        
-        // Step 2: If we get here, the key was not found. 
-        // We create a new node and add it to the front of the linked list.
+
+        // Insert path: prepend new node to the chain
         HashNode newNode = new HashNode(key, value);
         newNode.next = head;
         table[index] = newNode;
@@ -74,20 +71,43 @@ public class CustomHashMap {
         if (key == null) {
             return null;
         }
-
         int index = hashFunction(key);
         HashNode current = table[index];
 
-        // Basic linear search through the linked list to handle collisions
         while (current != null) {
-            // Compare strings using the standard .equals() method
             if (current.key.equals(key)) {
-                return current.value; // Found the vehicle
+                return current.value;
             }
-            // Move to the next node
             current = current.next;
         }
-        // If the loop finishes and nothing is found, return null
-        return null; 
+        return null;
+    }
+
+    public Vehicle remove(String key) {
+        if (key == null) {
+            return null;
+        }
+        int index = hashFunction(key);
+        HashNode current = table[index];
+        HashNode prev = null;
+
+        while (current != null) {
+            if (current.key.equals(key)) {
+                if (prev == null) {
+                    // Removing the head of the chain
+                    table[index] = current.next;
+                } else {
+                    prev.next = current.next;
+                }
+                return current.value;
+            }
+            prev = current;
+            current = current.next;
+        }
+        return null;
+    }
+
+    public boolean containsKey(String key) {
+        return get(key) != null;
     }
 }
