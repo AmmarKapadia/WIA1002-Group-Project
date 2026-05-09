@@ -30,7 +30,10 @@ public class DijkstraSolver {
      * @return
      */
     public Route solve(CustomGraph graph, String source, String destination) {
-
+        // TODO(Sprint 2 cleanup): Replace java.util.HashMap with CustomHashMap<Integer>
+        // and java.util.HashMap<String,String> with CustomHashMap<String> once Member 1
+        // genericises CustomHashMap. The rubric awards marks for using custom DS.
+        
         // (1) Initialise a distance map: source = 0, all others = Integer.MAX_VALUE.
         HashMap<String, Integer> dist = new HashMap<>();
         for (String v : graph.getAllVertices()) {
