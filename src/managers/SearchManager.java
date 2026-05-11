@@ -31,9 +31,10 @@ public class SearchManager {
 
     /**
      * Removes a vehicle record from the search index.
+     * @return true if the vehicle existed and was removed, false otherwise.
      * Required for Process Exit and Undo operations.
      */
-    public void removeVehicle(String licensePlate) {
-        vehicleTree.delete(licensePlate);
+    public boolean removeVehicle(String licensePlate) {
+        return vehicleTree.delete(licensePlate);
     }
 }
