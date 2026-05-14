@@ -1,182 +1,279 @@
 package managers;
 
 import datastructures.CustomQueue;
-import datastructures.CustomStack;
 import models.Vehicle;
 import models.ParkingSlot;
 import java.util.EmptyStackException;
 
 /**
- * Coordinates the gate flow: arrival queue, slot assignment, exit cleanup,
- * and undo. Talks to all four storage managers so that one user action
- * (Process Entry, Process Exit, Undo) keeps every data structure in sync.
+ * Coordinates the gate flow: arrival queue, slot assignment,
+ * exit cleanup, history management and undo.
+ *
+ * Sprint 2 Version:
+ * - Uses HistoryManager instead of direct CustomStack
+ * - Supports multi-step undo
+ * - Supports action history printing
  *
  * @Author ChengYang
- * UPDATED (Sprint 1 fixes):
- *   - Now also takes SearchManager and HashMapManager so storage is unified.
- *   - processNextArrival() registers in all four stores.
- *   - processExit() takes only the Vehicle (looks up the slot via
- *     vehicle.getAssignedSlot()) and removes from all four stores.
- *   - undoLastAction() for EXIT now correctly reclaims the slot from the
- *     available heap and re-registers in BST + HashMap, not just the
- *     linked list.
- *   - Common cleanup logic extracted into private helpers to avoid drift.
  */
 public class GateManager {
+
     private CustomQueue<Vehicle> waitingQueue;
-    private CustomStack<Action> historyStack;
+
+    // Sprint 2
+    private HistoryManager historyManager;
 
     private final SlotManager slotManager;
     private final RecordManager recordManager;
     private final SearchManager searchManager;
     private final HashMapManager hashMapManager;
 
-    // Optional stats hook — wired in by Main.java after construction so the
-    // existing 4-arg constructor stays unchanged. Null-safe everywhere it's used.
+    // Optional stats hook
     private StatsManager statsManager;
 
-    /** Wires the StatsManager so entry/exit are tracked. Safe to call once at startup. */
+    /** Wires the StatsManager */
     public void setStatsManager(StatsManager statsManager) {
         this.statsManager = statsManager;
-    }
-
-    /**
-     * Records one reversible operation. Carries enough state that undo can
-     * fully reverse the operation without re-querying any other manager.
-     */
-    private static class Action {
-        final String type;          // "ENTER" or "EXIT"
-        final Vehicle vehicle;
-        final ParkingSlot slot;
-
-        Action(String type, Vehicle vehicle, ParkingSlot slot) {
-            this.type = type;
-            this.vehicle = vehicle;
-            this.slot = slot;
-        }
     }
 
     public GateManager(SlotManager slotManager,
                        RecordManager recordManager,
                        SearchManager searchManager,
                        HashMapManager hashMapManager) {
-        this.waitingQueue   = new CustomQueue<>();
-        this.historyStack   = new CustomStack<>();
-        this.slotManager    = slotManager;
-        this.recordManager  = recordManager;
-        this.searchManager  = searchManager;
+
+        this.waitingQueue = new CustomQueue<>();
+
+        // Sprint 2
+        this.historyManager = new HistoryManager();
+
+        this.slotManager = slotManager;
+        this.recordManager = recordManager;
+        this.searchManager = searchManager;
         this.hashMapManager = hashMapManager;
     }
 
-    // 1. Vehicle arrival → enter the FIFO waiting queue
+    // =========================================================
+    // Vehicle enters waiting queue
+    // =========================================================
+
     public void addVehicleToQueue(Vehicle v) {
+
         waitingQueue.enqueue(v);
-        System.out.println("Vehicle[" + v.getLicensePlate() + "] has entered the waiting queue.");
+
+        System.out.println("Vehicle[" + v.getLicensePlate()
+                + "] has entered the waiting queue.");
     }
 
-    /**
-     * 2. Pull the next vehicle off the queue, assign it a slot, and register
-     *    it in every storage structure. Also pushes an ENTER action onto the
-     *    history stack so it can be undone.
-     */
+    // =========================================================
+    // Process next vehicle arrival
+    // =========================================================
+
     public Vehicle processNextArrival() {
+
         if (waitingQueue.isEmpty()) {
             System.out.println("No vehicles in the waiting queue.");
             return null;
         }
+
         if (!slotManager.hasAvailableSlots()) {
             System.out.println("Parking is full! Vehicle must wait.");
             return null;
         }
 
-        Vehicle nextVehicle  = waitingQueue.dequeue();
-        ParkingSlot assigned = slotManager.assignBestSlot();
-        nextVehicle.setAssignedSlot(assigned);   // NEW: link vehicle ↔ slot
+        Vehicle nextVehicle = waitingQueue.dequeue();
 
+        ParkingSlot assigned = slotManager.assignBestSlot();
+
+        nextVehicle.setAssignedSlot(assigned);
+
+        // register everywhere
         registerInAllStores(nextVehicle);
 
-        historyStack.push(new Action("ENTER", nextVehicle, assigned));
-        if (statsManager != null) statsManager.recordEntry(nextVehicle);
-        System.out.println("Processed arrival for: Vehicle[" + nextVehicle.getLicensePlate() + "]");
+        // record history
+        historyManager.recordAction(
+                new Action(
+                        "ENTER",
+                        nextVehicle,
+                        assigned,
+                        "ENTER "
+                                + nextVehicle.getLicensePlate()
+                                + " -> Slot "
+                                + assigned.getSlotID()
+                )
+        );
+
+        // stats
+        if (statsManager != null) {
+            statsManager.recordEntry(nextVehicle);
+        }
+
+        System.out.println("Processed arrival for: Vehicle["
+                + nextVehicle.getLicensePlate() + "]");
+
         return nextVehicle;
     }
 
-    /**
-     * 3. Process a vehicle leaving the lot. Releases the slot, removes the
-     *    vehicle from every storage structure, and pushes an EXIT action.
-     *
-     *    The slot is found via vehicle.getAssignedSlot() — no need for the
-     *    caller to look it up separately.
-     */
+    // =========================================================
+    // Process vehicle exit
+    // =========================================================
+
     public void processExit(Vehicle v) {
+
         if (v == null) {
             System.out.println("Cannot process exit: vehicle is null.");
             return;
         }
 
         ParkingSlot slot = v.getAssignedSlot();
+
         if (slot != null) {
+
             slotManager.releaseSlot(slot);
+
         } else {
-            System.out.println("Warning: vehicle " + v.getLicensePlate() + " had no slot recorded.");
+
+            System.out.println("Warning: vehicle "
+                    + v.getLicensePlate()
+                    + " had no slot recorded.");
         }
 
+        // remove everywhere
         forgetFromAllStores(v.getLicensePlate());
 
-        historyStack.push(new Action("EXIT", v, slot));
-        if (statsManager != null) statsManager.recordExit(v);
-        System.out.println("Processed exit for: Vehicle[" + v.getLicensePlate() + "]");
+        // record history
+        historyManager.recordAction(
+                new Action(
+                        "EXIT",
+                        v,
+                        slot,
+                        "EXIT "
+                                + v.getLicensePlate()
+                                + " <- Slot "
+                                + slot.getSlotID()
+                )
+        );
+
+        // stats
+        if (statsManager != null) {
+            statsManager.recordExit(v);
+        }
+
+        System.out.println("Processed exit for: Vehicle["
+                + v.getLicensePlate() + "]");
     }
 
-    /**
-     * 4. Undo the most recent action. Symmetric reversal:
-     *      ENTER → forget the vehicle and release the slot
-     *      EXIT  → re-register the vehicle and reclaim the slot
-     */
+    // =========================================================
+    // Undo ONE action
+    // =========================================================
+
     public void undoLastAction() {
+
         try {
-            Action lastAction = historyStack.pop();
 
-            if (lastAction.type.equals("ENTER")) {
-                System.out.println("Undoing ENTER for: Vehicle[" + lastAction.vehicle.getLicensePlate() + "]");
-                if (lastAction.slot != null) {
-                    slotManager.releaseSlot(lastAction.slot);
+            Action lastAction = historyManager.popLast();
+            
+            if (lastAction == null) {
+
+    System.out.println("No actions to undo!");
+
+    return;
+}
+
+            if (lastAction.getType().equals("ENTER")) {
+
+                System.out.println("Undoing ENTER for: Vehicle["
+                        + lastAction.getVehicle().getLicensePlate() + "]");
+
+                if (lastAction.getSlot() != null) {
+
+                    slotManager.releaseSlot(lastAction.getSlot());
                 }
-                forgetFromAllStores(lastAction.vehicle.getLicensePlate());
-                lastAction.vehicle.setAssignedSlot(null);
-                System.out.println("Undo: vehicle removed from all stores; slot returned to available heap.");
 
-            } else if (lastAction.type.equals("EXIT")) {
-                System.out.println("Undoing EXIT for: Vehicle[" + lastAction.vehicle.getLicensePlate() + "]");
+                forgetFromAllStores(
+                        lastAction.getVehicle().getLicensePlate()
+                );
 
-                // Pull the slot back OUT of the available heap and re-link it to the vehicle
-                if (lastAction.slot != null) {
-                    slotManager.reclaimSlot(lastAction.slot);
-                    lastAction.vehicle.setAssignedSlot(lastAction.slot);
-                }
+                lastAction.getVehicle().setAssignedSlot(null);
 
-                // Re-register vehicle in every store
-                registerInAllStores(lastAction.vehicle);
-                System.out.println("Undo: vehicle re-registered; slot reclaimed and marked OCCUPIED.");
+                System.out.println("Undo successful.");
+
             }
+
+            else if (lastAction.getType().equals("EXIT")) {
+
+                System.out.println("Undoing EXIT for: Vehicle["
+                        + lastAction.getVehicle().getLicensePlate() + "]");
+
+                // reclaim slot
+                if (lastAction.getSlot() != null) {
+
+                    slotManager.reclaimSlot(lastAction.getSlot());
+
+                    lastAction.getVehicle()
+                            .setAssignedSlot(lastAction.getSlot());
+                }
+
+                // re-register vehicle
+                registerInAllStores(lastAction.getVehicle());
+
+                System.out.println("Undo successful.");
+            }
+
         } catch (EmptyStackException e) {
+
             System.out.println("No actions to undo! Stack is empty.");
         }
     }
 
-    // ============== private helpers ==============
+    // =========================================================
+    // Undo MULTIPLE actions
+    // =========================================================
 
-    /** Add the vehicle to LinkedList, BST, and HashMap in one place. */
+    public void undoLast(int n) {
+
+        int count = 0;
+
+        while (count < n && historyManager.size() > 0) {
+
+            undoLastAction();
+
+            count++;
+        }
+
+        System.out.println("Undid "
+                + count
+                + " action(s) successfully.");
+    }
+
+    // =========================================================
+    // Access HistoryManager
+    // =========================================================
+
+    public HistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
+    // =========================================================
+    // PRIVATE HELPERS
+    // =========================================================
+
+    /** Register vehicle in all storage structures */
     private void registerInAllStores(Vehicle v) {
+
         recordManager.addRecord(v);
+
         searchManager.addVehicleRecord(v);
+
         hashMapManager.register(v);
     }
 
-    /** Remove the vehicle from LinkedList, BST, and HashMap in one place. */
+    /** Remove vehicle from all storage structures */
     private void forgetFromAllStores(String licensePlate) {
+
         recordManager.removeRecord(licensePlate);
+
         searchManager.removeVehicle(licensePlate);
+
         hashMapManager.unregister(licensePlate);
     }
 }
