@@ -49,6 +49,21 @@ public class HistoryManager {
         return count;
     }
 
+  /**
+     * Peek at the latest action without removing it
+     */
+    public Action peekLast() {
+        if (historyStack.isEmpty()) {
+            return null;
+        }
+        
+        Action topAction = historyStack.pop();
+        
+        historyStack.push(topAction);
+        
+        // 3. 返回我们刚才看到的那条记录
+        return topAction;
+    }
     /**
      * Print latest n actions
      */

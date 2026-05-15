@@ -166,84 +166,73 @@ public class GateManager {
     // Undo ONE action
     // =========================================================
 
-    public void undoLastAction() {
 
+    public boolean undoLastAction() { 
         try {
-
             Action lastAction = historyManager.popLast();
-            
             if (lastAction == null) {
+                System.out.println("History is empty. Nothing to undo.");
+                return false; 
+            }
 
-    System.out.println("No actions to undo!");
-
-    return;
-}
+            String plate = lastAction.getVehicle().getLicensePlate();
 
             if (lastAction.getType().equals("ENTER")) {
-
-                System.out.println("Undoing ENTER for: Vehicle["
-                        + lastAction.getVehicle().getLicensePlate() + "]");
-
+                System.out.println("Undoing ENTER for: " + plate);
+                
                 if (lastAction.getSlot() != null) {
-
                     slotManager.releaseSlot(lastAction.getSlot());
                 }
+                
+             
+                forgetFromAllStores(plate);
+                
+                System.out.println("Undo Successful.");
+                return true;
 
-                forgetFromAllStores(
-                        lastAction.getVehicle().getLicensePlate()
-                );
+            } else if (lastAction.getType().equals("EXIT")) {
+                System.out.println("Undoing EXIT for: " + plate);
+                
+                try { 
+                    if (lastAction.getSlot() != null) {
+                        slotManager.reclaimSlot(lastAction.getSlot());
+                        lastAction.getVehicle().setAssignedSlot(lastAction.getSlot());
+                    }
+                    registerInAllStores(lastAction.getVehicle());
+                    System.out.println("Undo Successful.");
+                    return true;
 
-                lastAction.getVehicle().setAssignedSlot(null);
-
-                System.out.println("Undo successful.");
-
-            }
-
-            else if (lastAction.getType().equals("EXIT")) {
-
-                System.out.println("Undoing EXIT for: Vehicle["
-                        + lastAction.getVehicle().getLicensePlate() + "]");
-
-                // reclaim slot
-                if (lastAction.getSlot() != null) {
-
-                    slotManager.reclaimSlot(lastAction.getSlot());
-
-                    lastAction.getVehicle()
-                            .setAssignedSlot(lastAction.getSlot());
+                } catch (Exception e) { 
+                    System.out.println("Partial Undo Warning: Cannot revert EXIT for [" + plate + 
+                                       "] because slot " + lastAction.getSlot().getSlotID() + 
+                                       " is currently occupied.");
+                    return false; 
                 }
-
-                // re-register vehicle
-                registerInAllStores(lastAction.getVehicle());
-
-                System.out.println("Undo successful.");
             }
-
         } catch (EmptyStackException e) {
-
-            System.out.println("No actions to undo! Stack is empty.");
+            System.out.println("History stack is empty.");
         }
+        return false;
     }
-
     // =========================================================
     // Undo MULTIPLE actions
     // =========================================================
 
-    public void undoLast(int n) {
+   public void undoLast(int n) {
+    int attempted = 0;
+    int successful = 0;
 
-        int count = 0;
-
-        while (count < n && historyManager.size() > 0) {
-
-            undoLastAction();
-
-            count++;
+   
+    while (attempted < n && historyManager.size() > 0) {
+        if (undoLastAction()) { 
+            successful++;
         }
-
-        System.out.println("Undid "
-                + count
-                + " action(s) successfully.");
+        attempted++;
     }
+
+    System.out.println("Multi-step Undo Summary: Successfully undid " + 
+                       successful + "/" + attempted + " requested actions.");
+}
 
     // =========================================================
     // Access HistoryManager
