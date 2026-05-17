@@ -126,9 +126,17 @@ public class Main {
                         recordManager.displayAllRecords();
                         break;
 
-                    case 6:
-                        gateManager.undoLastAction();
-                        break;
+                   case 6:
+                       System.out.print("Enter number of steps to undo: ");
+                    try {
+      
+                         int steps = Integer.parseInt(scanner.nextLine().trim());
+                         gateManager.undoLast(steps);
+        
+                 } catch (NumberFormatException e) {
+                         System.out.println("Invalid input! Please enter a valid number.");
+                 }
+                         break;
 
                     case 7:
                         running = false;
