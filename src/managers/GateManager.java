@@ -140,7 +140,8 @@ public class GateManager {
         // remove everywhere
         forgetFromAllStores(v.getLicensePlate());
 
-        // record history
+        // record history (null-safe slot label for corrupted state)
+        String exitSlotLabel = (slot != null) ? slot.getSlotID() : "(none)";
         historyManager.recordAction(
                 new Action(
                         "EXIT",
@@ -149,7 +150,7 @@ public class GateManager {
                         "EXIT "
                                 + v.getLicensePlate()
                                 + " <- Slot "
-                                + slot.getSlotID()
+                                + exitSlotLabel
                 )
         );
 
