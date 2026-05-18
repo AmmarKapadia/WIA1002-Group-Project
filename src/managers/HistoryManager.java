@@ -1,10 +1,43 @@
 package managers;
 
 import datastructures.CustomStack;
+import models.ParkingSlot;
+import models.Vehicle;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import javax.swing.Action;
+
+
 public class HistoryManager {
+    static class Action{
+        private String type;
+        private Vehicle vehicle;
+        private ParkingSlot parkingSlot;
+        private String messege;
+        private long time;
+
+        public String getType(){return type;}
+        public Vehicle getVehicle(){return vehicle;}
+        public ParkingSlot getSlot(){return parkingSlot;}
+        public String getMessege(){return messege;}
+
+        public Action(String type, Vehicle vehicle, ParkingSlot parkingSlot, String messege){
+            this.type = type;
+            this.vehicle = vehicle;
+            this.parkingSlot = parkingSlot;
+            this.messege = messege;
+            this.time = System.currentTimeMillis();
+        }
+
+        public long getTimestamp(){
+            return time;
+        }
+        public String getDescription(){
+            return messege;
+        }
+    }
 
     private CustomStack<Action> historyStack;
 

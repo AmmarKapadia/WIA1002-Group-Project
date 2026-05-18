@@ -5,6 +5,8 @@ import models.Vehicle;
 import models.ParkingSlot;
 import java.util.EmptyStackException;
 
+import managers.HistoryManager.Action;;
+
 /**
  * Coordinates the gate flow: arrival queue, slot assignment,
  * exit cleanup, history management and undo.
