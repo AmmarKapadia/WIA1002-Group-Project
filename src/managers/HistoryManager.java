@@ -7,52 +7,8 @@ import models.Vehicle;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.swing.Action;
-
 
 public class HistoryManager {
-    public static class Action {
-
-        private String type;
-        private Vehicle vehicle;
-        private ParkingSlot slot;
-
-        // Sprint 2
-        private long timestamp;
-        private String description;
-
-        public Action(String type, Vehicle vehicle,
-                    ParkingSlot slot, String description) {
-
-            this.type = type;
-            this.vehicle = vehicle;
-            this.slot = slot;
-            this.description = description;
-
-            this.timestamp = System.currentTimeMillis();
-        }
-
-        public String getType() {
-            return type;
-        }
-
-        public Vehicle getVehicle() {
-            return vehicle;
-        }
-
-        public ParkingSlot getSlot() {
-            return slot;
-        }
-
-        public long getTimestamp() {
-            return timestamp;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-    }
-
     private CustomStack<Action> historyStack;
 
     // 自己记录数量
