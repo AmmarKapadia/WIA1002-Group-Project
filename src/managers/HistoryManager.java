@@ -11,31 +11,45 @@ import javax.swing.Action;
 
 
 public class HistoryManager {
-    static class Action{
+    public static class Action {
+
         private String type;
         private Vehicle vehicle;
-        private ParkingSlot parkingSlot;
-        private String messege;
-        private long time;
+        private ParkingSlot slot;
 
-        public String getType(){return type;}
-        public Vehicle getVehicle(){return vehicle;}
-        public ParkingSlot getSlot(){return parkingSlot;}
-        public String getMessege(){return messege;}
+        // Sprint 2
+        private long timestamp;
+        private String description;
 
-        public Action(String type, Vehicle vehicle, ParkingSlot parkingSlot, String messege){
+        public Action(String type, Vehicle vehicle,
+                    ParkingSlot slot, String description) {
+
             this.type = type;
             this.vehicle = vehicle;
-            this.parkingSlot = parkingSlot;
-            this.messege = messege;
-            this.time = System.currentTimeMillis();
+            this.slot = slot;
+            this.description = description;
+
+            this.timestamp = System.currentTimeMillis();
         }
 
-        public long getTimestamp(){
-            return time;
+        public String getType() {
+            return type;
         }
-        public String getDescription(){
-            return messege;
+
+        public Vehicle getVehicle() {
+            return vehicle;
+        }
+
+        public ParkingSlot getSlot() {
+            return slot;
+        }
+
+        public long getTimestamp() {
+            return timestamp;
+        }
+
+        public String getDescription() {
+            return description;
         }
     }
 
