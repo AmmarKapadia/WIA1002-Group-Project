@@ -1,0 +1,21 @@
+/* css/styles.css */
+.root {
+    /* Define global color tokens */
+    -fx-cream: #F5EFE6; 
+    -fx-chocolate: #3E2723; 
+    -fx-maple-gold: #C9985C; 
+    -fx-background-color: -fx-cream;
+}
+
+/* Stats panel value style */
+.stat-value {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -fx-chocolate;
+}
+
+/* Stats panel label style */
+.stat-label {
+    -fx-font-size: 12px;
+    -fx-text-fill: -fx-chocolate;
+}
