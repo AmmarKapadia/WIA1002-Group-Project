@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
+
+    <center>
+        <VBox spacing="10">
+            <HBox spacing="10">
+                <fx:include source="ActionPane.fxml" />
+                <fx:include source="SearchPane.fxml" />
+            </HBox>
+            <fx:include source="MapPane.fxml" />
+        </VBox>
+    </center>
+
+    <right>
+        <VBox spacing="10">
+            <fx:include source="StatsPane.fxml" />
+            <fx:include source="HistoryPane.fxml" />
+        </VBox>
+    </right>
+</BorderPane>
