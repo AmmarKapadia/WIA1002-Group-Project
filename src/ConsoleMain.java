@@ -16,7 +16,7 @@ import models.ParkingSlot;
 /**
  * Main Integration Hub for Sprint 2
  */
-public class Main {
+public class ConsoleMain {
 
     // --- SYSTEM MANAGERS ---
     private static SlotManager slotManager;
