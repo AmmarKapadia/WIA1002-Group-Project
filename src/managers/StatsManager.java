@@ -86,6 +86,18 @@ public class StatsManager {
         return (count == null) ? 0 : count;
     }
 
+    /**
+     * Returns the entry count for a specific hour-of-day ("00".."23"),
+     * or 0 if there have been no entries during that hour.
+     * Used by the GUI heatmap to color all 24 cells with proper gradient
+     * intensity, not just the single peak cell.
+     */
+    public int getEntryCountForHour(String hourKey) {
+        if (hourKey == null) return 0;
+        Integer count = hourlyEntryCount.get(hourKey);
+        return (count == null) ? 0 : count;
+    }
+
     public int getTotalEntries() { return totalEntries; }
     public int getTotalExits()   { return totalExits; }
 

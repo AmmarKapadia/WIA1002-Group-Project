@@ -1,11 +1,14 @@
 package managers;
 
 import datastructures.CustomStack;
+import models.ParkingSlot;
+import models.Vehicle;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class HistoryManager {
 
+public class HistoryManager {
     private CustomStack<Action> historyStack;
 
     // 自己记录数量

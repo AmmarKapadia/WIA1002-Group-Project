@@ -1,0 +1,83 @@
+.root {
+    /* Color tokens */
+    -cream:              #F5EFE6;
+    -warm-white:         #FBF7F0;
+    -light-maple:        #E8DDCB;
+    -maple-gold:         #C9985C;
+    -taupe:              #A1887F;
+    -warm-brown:         #6D4C41;
+    -espresso:           #3E2723;
+    -success:            #6B8E4E;
+    -warning:            #C97A3C;
+    -error:              #A0413E;
+
+    -fx-background-color: -cream;
+    -fx-font-family:      "Segoe UI", "Helvetica Neue", "Inter", sans-serif;
+    -fx-text-fill:        -espresso;
+}
+
+.header-bar {
+    -fx-background-color: -espresso;
+    -fx-padding:          14px;
+    -fx-font-size:        18px;
+    -fx-font-weight:      bold;
+    -fx-text-fill:        -cream;
+}
+
+.pane-card {
+    -fx-background-color:  -warm-white;
+    -fx-background-radius: 8px;
+    -fx-border-color:      -light-maple;
+    -fx-border-radius:     8px;
+    -fx-padding:           14px;
+}
+
+.pane-header {
+    -fx-font-size:   16px;
+    -fx-font-weight: bold;
+    -fx-text-fill:   -espresso;
+    -fx-padding:     0 0 8 0;
+}
+
+.action-button {
+    -fx-background-color:  -maple-gold;
+    -fx-text-fill:         -warm-white;
+    -fx-font-weight:       bold;
+    -fx-background-radius: 4px;
+    -fx-padding:           6px 14px;
+    -fx-cursor:            hand;
+}
+
+.action-button:hover {
+    -fx-background-color:  -taupe;
+}
+
+.text-field {
+    -fx-background-color:  -cream;
+    -fx-border-color:      -light-maple;
+    -fx-border-radius:     4px;
+    -fx-background-radius: 4px;
+}
+
+.stat-value {
+    -fx-font-size:         28px;
+    -fx-font-weight:       bold;
+    -fx-text-fill:         -espresso;
+}
+
+.stat-label {
+    -fx-font-size:         11px;
+    -fx-text-fill:         -warm-brown;
+}
+
+.progress-bar > .bar {
+    -fx-background-color:  -maple-gold;
+}
+
+.progress-bar > .track {
+    -fx-background-color:  -light-maple;
+}
+
+.status-success { -fx-text-fill: -success; }
+.status-error   { -fx-text-fill: -error; }
+.status-warning { -fx-text-fill: -warning; }
