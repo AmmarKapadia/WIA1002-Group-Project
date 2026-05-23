@@ -42,11 +42,14 @@ public class HistoryPaneController {
         undoSpinner.setEditable(true); // 允许用户直接输入数字
         
         // 2. 配置指南要求的历史记录为空时的文字提示
-        historyListView.setPlaceholder(new Label("No actions yet try Process Entry"));
+        historyListView.setPlaceholder(new Label("No actions yet - try Process Entry"));
     }
 
-    // 用于注入上下文，使你能拿到底层的 HistoryManager
-    public void setAppContext(AppContext appContext) {
+    /**
+     * Called once by MainController after FXML load completes,
+     * passing in the shared AppContext. Triggers the first refresh.
+     */
+    public void setContext(AppContext appContext) {
         this.appContext = appContext;
         refresh();
     }
