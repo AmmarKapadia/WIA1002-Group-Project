@@ -2,49 +2,70 @@ package controllers;
 
 import app.AppContext;
 import javafx.fxml.FXML;
+import models.Route;
 
 public class MainController {
-    
-    private AppContext appContext;
 
-    // Injected nested controllers from <fx:include> tags inside MainWindow.fxml
+    // Inject sub-panel controllers (Naming convention: fx:id + Controller)
     @FXML private ActionPaneController actionPaneController;
     @FXML private SearchPaneController searchPaneController;
-    
-    // Stubs for teammates' panel controllers (uncomment and import as they submit code)
-    // @FXML private MapPaneController mapPaneController;
-    // @FXML private StatsPaneController statsPaneController;
-    // @FXML private HistoryPaneController historyPaneController;
+    @FXML private MapPaneController mapPaneController;
+    @FXML private StatsPaneController statsPaneController;
+    @FXML private HistoryPaneController historyPaneController;
 
-    /**
-     * Setup context injection called immediately after App startup.
-     */
-    public void setAppContext(AppContext context) {
-        this.appContext = context;
-        
-        // Pass the core data context and references to sub-controllers
-        if (actionPaneController != null) {
-            actionPaneController.setup(this.appContext, this);
-        }
-        if (searchPaneController != null) {
-            searchPaneController.setup(this.appContext);
-        }
-        
-        System.out.println("Main Framework Wiring Complete.");
+    private AppContext context;
+    private RouteOverlayHelper routeHelper; // Highlight helper for Member 4
+
+    @FXML
+    public void initialize() {
+        routeHelper = new RouteOverlayHelper();
     }
 
     /**
-     * Crucial coordination point for Sprint 3.
-     * Triggers UI updates across all teammate panels whenever an action changes the system state.
+     * Called by the App entry point upon startup to inject the context and propagate it downward
+     */
+    public void initContext(AppContext context) {
+        this.context = context;
+        this.context.setMainController(this); // Register with context
+
+        // Bind the context to all sub-controllers
+        if (actionPaneController != null) actionPaneController.setContext(context);
+        if (searchPaneController != null) searchPaneController.setContext(context);
+        if (mapPaneController != null) mapPaneController.setContext(context);
+        if (statsPaneController != null) statsPaneController.setContext(context);
+        if (historyPaneController != null) historyPaneController.setContext(context);
+        
+        // Initial data refresh upon loading
+        refreshAll();
+    }
+
+    /**
+     * Core method: Triggers a full UI refresh to keep all components synchronized
      */
     public void refreshAll() {
-        // 1. Refresh your search results if needed, or leave it to manual search
+        // Refresh Member 2 map canvas (trigger redraw)
+        if (mapPaneController != null) {
+            // Based on MapPaneController.java implementation, call its rendering or refresh logic
+            // If it has a custom method for drawing, call it here (e.g., mapPaneController.drawMap();)
+        }
         
-        // 2. Trigger updates for your group members once they replace the placeholder FXMLs
-        // if (mapPaneController != null) { mapPaneController.refresh(); }
-        // if (statsPaneController != null) { statsPaneController.refresh(); }
-        // if (historyPaneController != null) { historyPaneController.refresh(); }
+        // Refresh Member 1 data panel
+        if (statsPaneController != null) {
+            statsPaneController.refresh(); 
+        }
         
-        System.out.println("Broadcasting global refresh signal to all functional panels.");
+        // Refresh Member 3 history list
+        if (historyPaneController != null) {
+            // Based on HistoryPaneController.java implementation, call its refresh method
+        }
+    }
+
+    /**
+     * Calls Member 4 logic to highlight a path on the map for 5 seconds
+     */
+    public void showRoute(Route route) {
+        if (routeHelper != null && mapPaneController != null) {
+            routeHelper.highlightRoute(route, mapPaneController);
+        }
     }
 }

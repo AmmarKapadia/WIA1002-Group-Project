@@ -8,47 +8,35 @@ import models.Vehicle;
 
 public class SearchPaneController {
 
-    @FXML private TextField searchField;
+    @FXML private TextField searchTextField;
     @FXML private Label resultLabel;
 
-    private AppContext appContext;
+    private AppContext context;
 
-    /**
-     * Injects the AppContext from MainController.
-     */
-    public void setup(AppContext context) {
-        this.appContext = context;
+    public void setContext(AppContext context) {
+        this.context = context;
     }
 
-    /**
-     * Handles the vehicle search lookup query.
-     */
     @FXML
     private void handleSearch() {
-        String plate = searchField.getText().trim().toUpperCase();
+        if (context == null) return;
+        String plate = searchTextField.getText().trim().toUpperCase();
         if (plate.isEmpty()) {
-            resultLabel.setText("Please provide a license plate.");
+            resultLabel.setText("Please enter a plate number.");
+            resultLabel.setStyle("-fx-text-fill: #D32F2F;"); // Red warning style
             return;
         }
 
-        try {
-            // Querying using HashMapManager's lookup method for O(1) efficiency
-            Vehicle foundVehicle = appContext.getHashMapManager().lookup(plate);
-            
-            if (foundVehicle != null) {
-                String slotID = (foundVehicle.getAssignedSlot() != null) ? 
-                                foundVehicle.getAssignedSlot().getSlotID() : "No slot assigned";
-                                
-                // Displaying concise status details using data from models.Vehicle
-                resultLabel.setText(String.format("Status: FOUND\nPlate: %s\nOwner: %s\nSlot: %s", 
-                        foundVehicle.getLicensePlate(), 
-                        foundVehicle.getOwnerName(), 
-                        slotID));
-            } else {
-                resultLabel.setText("Status: NOT FOUND\nVehicle '" + plate + "' is not inside the parking lot.");
-            }
-        } catch (Exception e) {
-            resultLabel.setText("Search error: " + e.getMessage());
+        // Use HashMapManager for O(1) quick lookup of license plate mapping
+        Vehicle vehicle = context.getHashMapManager().lookup(plate);
+
+        if (vehicle != null && vehicle.getAssignedSlot() != null) {
+            String slotID = vehicle.getAssignedSlot().getSlotID();
+            resultLabel.setText("Vehicle [" + plate + "] is parked at slot: " + slotID);
+            resultLabel.setStyle("-fx-text-fill: #2E7D32; -fx-font-weight: bold;"); // Green safe style
+        } else {
+            resultLabel.setText("Vehicle [" + plate + "] not found or already exited.");
+            resultLabel.setStyle("-fx-text-fill: #7B5E57; -fx-font-style: italic;"); // Chocolate subtle style
         }
     }
 }

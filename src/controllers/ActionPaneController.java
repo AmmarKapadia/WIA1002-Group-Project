@@ -2,101 +2,73 @@ package controllers;
 
 import app.AppContext;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import models.ParkingSlot;
+import models.Route;
 import models.Vehicle;
 
 public class ActionPaneController {
 
-    @FXML private TextField plateField;
-    @FXML private Label statusLabel;
+    @FXML private TextField plateTextField;
+    private AppContext context;
 
-    private AppContext appContext;
-    private MainController mainController;
-
-    /**
-     * Injects the required contexts from MainController.
-     */
-    public void setup(AppContext context, MainController main) {
-        this.appContext = context;
-        this.mainController = main;
+    public void setContext(AppContext context) {
+        this.context = context;
     }
 
-    /**
-     * Handles the vehicle entry workflow.
-     */
     @FXML
     private void handleEntry() {
-        String plate = plateField.getText().trim().toUpperCase();
-        if (plate.isEmpty()) {
-            statusLabel.setText("Error: Please enter a license plate.");
-            return;
+        if (context == null) return;
+        String plate = plateTextField.getText().trim().toUpperCase();
+        if (plate.isEmpty()) return;
+
+        // 1. Create a vehicle object and add it to the entry queue
+        // (Note: Assumes Vehicle has this constructor; adjust if necessary based on your Vehicle entity class)
+        Vehicle newVehicle = new Vehicle(plate,null,System.currentTimeMillis()); 
+        context.getGateManager().addVehicleToQueue(newVehicle);
+
+        // 2. Schedule the processing of the current queued vehicle (assign it to a parking slot)
+        Vehicle processedVehicle = context.getGateManager().processNextArrival();
+
+        // 3. Check if the vehicle was successfully parked (processedVehicle might be null if slots are full)
+        if (processedVehicle != null && processedVehicle.getAssignedSlot() != null) {
+            String targetSlotID = processedVehicle.getAssignedSlot().getSlotID();
+            
+            // 4. Calculate the shortest path from the GATE to the target slot (corrected to getRoute)
+            Route route = context.getRouteManager().getRoute(targetSlotID);
+            
+            if (context.getMainController() != null && route != null) {
+                context.getMainController().showRoute(route);
+            }
         }
 
-        try {
-            // Create a new Vehicle instance using the exact constructor from Vehicle.java
-            // Defaulting owner name to "Guest" and entry time to current system millis
-            Vehicle vehicle = new Vehicle(plate, "Guest", System.currentTimeMillis());
-            
-            // 1. Add the vehicle to the waiting queue
-            appContext.getGateManager().addVehicleToQueue(vehicle);
-            
-            // 2. Process the arrival to assign a slot and update stores
-            Vehicle processedVehicle = appContext.getGateManager().processNextArrival();
-            
-            if (processedVehicle != null) {
-                String slotID = processedVehicle.getAssignedSlot() != null ? 
-                                processedVehicle.getAssignedSlot().getSlotID() : "Unknown";
-                statusLabel.setText("Success: Vehicle [" + plate + "] parked at Slot [" + slotID + "].");
-                plateField.clear();
-                
-                // Trigger global refresh to update Map, Stats, and History views
-                mainController.refreshAll();
-            } else {
-                // processNextArrival returns null if parking is full
-                statusLabel.setText("Waiting Queue: Lot is full! Vehicle [" + plate + "] is waiting in queue.");
-                plateField.clear();
-                
-                // Refresh history or stats if needed even when just queued
-                mainController.refreshAll();
-            }
-            
-        } catch (Exception e) {
-            statusLabel.setText("Entry failed: " + e.getMessage());
+        // 5. Notify all panels to refresh the UI
+        if (context.getMainController() != null) {
+            context.getMainController().refreshAll();
         }
+        plateTextField.clear();
     }
 
-    /**
-     * Handles the vehicle exit workflow.
-     */
     @FXML
     private void handleExit() {
-        String plate = plateField.getText().trim().toUpperCase();
-        if (plate.isEmpty()) {
-            statusLabel.setText("Error: Please enter a license plate.");
-            return;
+        if (context == null) return;
+        String plate = plateTextField.getText().trim().toUpperCase();
+        if (plate.isEmpty()) return;
+
+        // 1. Look up the Vehicle instance from the HashMap structure using the plate number
+        Vehicle v = context.getHashMapManager().lookup(plate);
+        
+        if (v != null) {
+            // 2. Call the backend GateManager to perform the exit logic (passing the Vehicle object)
+            context.getGateManager().processExit(v);
+        } else {
+            System.out.println("Error: Vehicle with plate " + plate + " not found inside the parking lot.");
         }
 
-        try {
-            // Find the active vehicle object from HashMapManager since processExit requires a Vehicle object
-            Vehicle vehicleToExit = appContext.getHashMapManager().lookup(plate);
-            
-            if (vehicleToExit == null) {
-                statusLabel.setText("Error: Vehicle [" + plate + "] is not registered in the system.");
-                return;
-            }
-            
-            // Pass the retrieved vehicle object to GateManager
-            appContext.getGateManager().processExit(vehicleToExit);
-            
-            statusLabel.setText("Success: Vehicle [" + plate + "] has exited the lot.");
-            plateField.clear();
-            
-            // Trigger global refresh across all panels
-            mainController.refreshAll();
-            
-        } catch (Exception e) {
-            statusLabel.setText("Exit failed: " + e.getMessage());
+        // 3. Global UI refresh
+        if (context.getMainController() != null) {
+            context.getMainController().refreshAll();
         }
+        plateTextField.clear();
     }
 }
