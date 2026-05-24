@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+
+<VBox styleClass="pane-card" spacing="12"
+      xmlns="http://javafx.com/javafx/16"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.StatsPaneController">
+
+    <Label text="Parking Statistics" styleClass="pane-header"/>
+
+    <!-- Numbers row: 4 stat cells -->
+    <HBox spacing="20" alignment="CENTER">
+        <VBox alignment="CENTER" spacing="2">
+            <Label fx:id="parkedValueLabel" text="0" styleClass="stat-value"/>
+            <Label text="Parked" styleClass="stat-label"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="2">
+            <Label fx:id="availableValueLabel" text="0" styleClass="stat-value"/>
+            <Label text="Available" styleClass="stat-label"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="2">
+            <Label fx:id="entriesValueLabel" text="0" styleClass="stat-value"/>
+            <Label text="Entries" styleClass="stat-label"/>
+        </VBox>
+        <VBox alignment="CENTER" spacing="2">
+            <Label fx:id="exitsValueLabel" text="0" styleClass="stat-value"/>
+            <Label text="Exits" styleClass="stat-label"/>
+        </VBox>
+    </HBox>
+
+    <!-- Occupancy progress bar -->
+    <VBox spacing="4">
+        <Label fx:id="occupancyLabel" text="0.0% Occupied" styleClass="stat-label"/>
+        <ProgressBar fx:id="occupancyBar" prefWidth="Infinity" prefHeight="14" progress="0"/>
+    </VBox>
+
+    <!-- Peak hour line -->
+    <Label fx:id="peakHourLabel" text="Peak entry hour: (no entries yet)" styleClass="stat-label"/>
+
+    <!-- 24-hour heatmap -->
+    <VBox spacing="4">
+        <Label text="Entries by Hour" styleClass="stat-label"/>
+        <HBox fx:id="heatmapContainer" spacing="2"/>
+    </VBox>
+
+</VBox>

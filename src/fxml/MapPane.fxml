@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane xmlns="http://javafx.com/javafx/16" 
+      xmlns:fx="http://fxml.com/fxml/1" 
+      fx:controller="controllers.MapPaneController"
+      prefHeight="500.0" 
+      prefWidth="600.0"
+      style="-fx-background-color: #F5EFE6;">
+      
+   <children>
+      <Canvas fx:id="mapCanvas" 
+              height="500.0" 
+              width="600.0" />
+   </children>
+   
+</Pane>

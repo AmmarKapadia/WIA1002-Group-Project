@@ -46,4 +46,9 @@ public class HashMapManager {
     public int size() {
         return hashMap.size();
     }
+
+    /** Returns the license plates of all currently parked vehicles. Used by MapPane. */
+    public String[] getAllParkedPlates() {
+        return hashMap.keys();
+    }
 }
