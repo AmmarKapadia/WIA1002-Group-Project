@@ -45,8 +45,7 @@ public class MainController {
     public void refreshAll() {
         // Refresh Member 2 map canvas (trigger redraw)
         if (mapPaneController != null) {
-            // Based on MapPaneController.java implementation, call its rendering or refresh logic
-            // If it has a custom method for drawing, call it here (e.g., mapPaneController.drawMap();)
+            mapPaneController.refresh();
         }
         
         // Refresh Member 1 data panel
@@ -56,7 +55,7 @@ public class MainController {
         
         // Refresh Member 3 history list
         if (historyPaneController != null) {
-            // Based on HistoryPaneController.java implementation, call its refresh method
+            historyPaneController.refresh();
         }
     }
 
