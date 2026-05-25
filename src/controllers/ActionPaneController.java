@@ -10,6 +10,7 @@ import models.Vehicle;
 public class ActionPaneController {
 
     @FXML private TextField plateTextField;
+    @FXML private TextField ownerTextField;
     private AppContext context;
 
     public void setContext(AppContext context) {
