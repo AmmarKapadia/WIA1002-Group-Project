@@ -92,18 +92,17 @@ public class HistoryPaneController {
     @FXML
     private void handleUndo() {
         if (appContext == null || appContext.getGateManager() == null) return;
-        
+
         int steps = undoSpinner.getValue();
-        
-        // 1. 调用底层的撤销逻辑
         appContext.getGateManager().undoLast(steps);
-        System.out.println("Undoing last " + steps + " steps.");
-        
-        // 2. 撤销成功后，触发全局刷新（这里需要配合 Member 5 写的 MainController）
-        // 如果你们的 AppContext 里有全局刷新的引用，可以解除下行的注释：
-        // appContext.getMainController().refreshAll();
-        
-        // 兜底：先刷新你自己的历史面板
-        refresh();
+
+        // Trigger a global refresh so the map and stats panels also reflect
+        // the undo (slot flips back to cream, parked count drops, etc.).
+        if (appContext.getMainController() != null) {
+            appContext.getMainController().refreshAll();
+        } else {
+            // Fallback in case MainController isn't wired (shouldn't happen in production)
+            refresh();
+        }
     }
 }
