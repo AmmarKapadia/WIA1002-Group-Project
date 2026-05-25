@@ -8,7 +8,11 @@
       fx:controller="controllers.MapPaneController"
       prefHeight="500.0" 
       prefWidth="600.0"
-      style="-fx-background-color: #F5EFE6;">
+      maxWidth="600.0"
+      maxHeight="500.0"
+      minWidth="600.0"
+      minHeight="500.0"
+      style="-fx-background-color: #F5EFE6; -fx-border-color: #3E2723; -fx-border-width: 1; -fx-border-radius: 4;">
       
    <children>
       <Canvas fx:id="mapCanvas" 

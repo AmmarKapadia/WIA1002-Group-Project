@@ -11,6 +11,7 @@ public class ActionPaneController {
 
     @FXML private TextField plateTextField;
     @FXML private TextField ownerTextField;
+    @FXML private javafx.scene.control.Label statusLabel;
     private AppContext context;
 
     public void setContext(AppContext context) {
@@ -22,26 +23,29 @@ public class ActionPaneController {
         if (context == null) return;
         String plate = plateTextField.getText().trim().toUpperCase();
         String owner = ownerTextField.getText().trim();
-        if (plate.isEmpty() || owner.isEmpty()) return;
-        // 1. Create a vehicle object and add it to the entry queue
+        if (plate.isEmpty() || owner.isEmpty()) {
+            setStatus("Plate and owner name are both required.", "status-error");
+            return;
+        }
+
         Vehicle newVehicle = new Vehicle(plate, owner, System.currentTimeMillis());
         context.getGateManager().addVehicleToQueue(newVehicle);
-
-        // 2. Schedule the processing of the current queued vehicle (assign it to a parking slot)
         Vehicle processedVehicle = context.getGateManager().processNextArrival();
 
-        // 3. Refresh ALL panels FIRST so the map redraws cleanly (slot flips chocolate, stats update)
+        // Refresh first so map redraws cleanly before highlight is drawn on top
         if (context.getMainController() != null) {
             context.getMainController().refreshAll();
         }
 
-        // 4. NOW draw the highlight on top of the refreshed map — it will stay visible for 5 seconds
         if (processedVehicle != null && processedVehicle.getAssignedSlot() != null) {
             String targetSlotID = processedVehicle.getAssignedSlot().getSlotID();
             Route route = context.getRouteManager().getRoute(targetSlotID);
             if (context.getMainController() != null && route != null) {
                 context.getMainController().showRoute(route);
             }
+            setStatus("Parked " + plate + " in slot " + targetSlotID, "status-success");
+        } else {
+            setStatus("Parking is full. " + plate + " added to wait queue.", "status-warning");
         }
 
         plateTextField.clear();
@@ -52,22 +56,29 @@ public class ActionPaneController {
     private void handleExit() {
         if (context == null) return;
         String plate = plateTextField.getText().trim().toUpperCase();
-        if (plate.isEmpty()) return;
-
-        // 1. Look up the Vehicle instance from the HashMap structure using the plate number
-        Vehicle v = context.getHashMapManager().lookup(plate);
-        
-        if (v != null) {
-            // 2. Call the backend GateManager to perform the exit logic (passing the Vehicle object)
-            context.getGateManager().processExit(v);
-        } else {
-            System.out.println("Error: Vehicle with plate " + plate + " not found inside the parking lot.");
+        if (plate.isEmpty()) {
+            setStatus("Enter a plate number.", "status-error");
+            return;
         }
 
-        // 3. Global UI refresh
+        Vehicle v = context.getHashMapManager().lookup(plate);
+        if (v != null) {
+            context.getGateManager().processExit(v);
+            setStatus("Exited " + plate + " successfully.", "status-success");
+        } else {
+            setStatus("Vehicle " + plate + " is not currently parked.", "status-error");
+        }
+
         if (context.getMainController() != null) {
             context.getMainController().refreshAll();
         }
         plateTextField.clear();
+        ownerTextField.clear();
+    }
+    
+    private void setStatus(String text, String styleClass) {
+        statusLabel.setText(text);
+        statusLabel.getStyleClass().removeAll("status-success", "status-error", "status-warning");
+        statusLabel.getStyleClass().add(styleClass);
     }
 }

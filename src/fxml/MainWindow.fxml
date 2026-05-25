@@ -27,7 +27,7 @@
    </center>
 
    <right>
-       <VBox spacing="15" prefWidth="320.0" minWidth="320.0" BorderPane.alignment="CENTER">
+       <VBox spacing="15" prefWidth="650.0" minWidth="650.0" BorderPane.alignment="CENTER">
            <padding><Insets left="15"/></padding>
            <fx:include fx:id="statsPane" source="StatsPane.fxml"/>
            <fx:include fx:id="historyPane" source="HistoryPane.fxml" VBox.vgrow="ALWAYS"/>
