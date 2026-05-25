@@ -21,11 +21,10 @@ public class ActionPaneController {
     private void handleEntry() {
         if (context == null) return;
         String plate = plateTextField.getText().trim().toUpperCase();
-        if (plate.isEmpty()) return;
-
+        String owner = ownerTextField.getText().trim();
+        if (plate.isEmpty() || owner.isEmpty()) return;
         // 1. Create a vehicle object and add it to the entry queue
-        // (Note: Assumes Vehicle has this constructor; adjust if necessary based on your Vehicle entity class)
-        Vehicle newVehicle = new Vehicle(plate,null,System.currentTimeMillis()); 
+        Vehicle newVehicle = new Vehicle(plate, owner, System.currentTimeMillis());
         context.getGateManager().addVehicleToQueue(newVehicle);
 
         // 2. Schedule the processing of the current queued vehicle (assign it to a parking slot)
@@ -46,6 +45,7 @@ public class ActionPaneController {
         }
 
         plateTextField.clear();
+        ownerTextField.clear();
     }
 
     @FXML
