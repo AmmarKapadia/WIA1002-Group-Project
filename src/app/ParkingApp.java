@@ -24,6 +24,7 @@ public class ParkingApp extends Application {
 
         // 4. Assemble the stage and render
         Scene scene = new Scene(root, 1100, 740);
+        scene.getStylesheets().add(getClass().getResource("/css/styles.css").toExternalForm());
         primaryStage.setTitle("Smart Parking System - Sprint 3 Production");
         primaryStage.setResizable(false); // Keep fixed layout
         primaryStage.setScene(scene);
