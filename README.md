@@ -81,7 +81,7 @@ No external dependencies beyond what JavaFX ships with. No databases.
 
 ### One-time JavaFX setup
 
-1. Extract OpenJFX 16 to `C:\openjfx\javafx-sdk-16\` (Windows) or equivalent path on Mac/Linux. **Path must match exactly** — the project's `project.properties` references this location.
+1. Extract OpenJFX 16 to `C:\openjfx\` (Windows) or equivalent path on Mac/Linux. **Path must match exactly** — the project's `project.properties` references this location.
 2. **Delete `src.zip`** from `C:\openjfx\javafx-sdk-16\lib\` if present. JavaFX 16 ships a source archive in `lib/` that breaks Java's module path scanner. The system will fail to launch otherwise.
 3. In NetBeans: **Tools → Libraries → New Library** → name it exactly `JavaFX 16` → on the Classpath tab, add all `.jar` files from `C:\openjfx\javafx-sdk-16\lib\` (do NOT add `src.zip`).
 4. Open the project. NetBeans should automatically link the `JavaFX 16` library on first build.
@@ -94,7 +94,7 @@ No external dependencies beyond what JavaFX ships with. No databases.
 ### Running Tests
 
 - **Run → Test Project** (Alt+F6 in NetBeans).
-- All ~57 JUnit tests across the data structures and manager classes should pass.
+- All ~88 JUnit tests across the data structures and manager classes passed.
 
 ---
 
@@ -161,7 +161,7 @@ test/                     # JUnit test suite (Sprint 4)
 |---|---|---|
 | Member 1 | **Ammar Kapadia** | HashMap + StatsManager (statistics dashboard) |
 | Member 2 | **Nicolas** | Graph + Edges (parking map rendering) |
-| Member 3 | **Sun Chengyang** (孙成阳) | Queue + Stack + HistoryManager (undo logic) |
+| Member 3 | **Sun Chengyang** | Queue + Stack + HistoryManager (undo logic) |
 | Member 4 | **Yim Zi Hao** | MinHeap + Dijkstra (slot assignment + routing) |
 | Member 5 | **Xu Zimao** | AVL Tree + SearchManager + JavaFX integration |
 
@@ -183,9 +183,6 @@ This project was developed across four sprints over the course of the semester:
 **Course:** WIA1002 — Data Structures
 **Institution:** Universiti Malaya
 **Academic Session:** 2025/2026 Semester 2
-
+**Tutor:** Prof. Muhammad Lubani
+**Demonstator:** Mohammad Shahid Akhtar
 ---
-
-## License
-
-This project was developed as coursework and is not licensed for redistribution. Inquire with the team before reusing significant portions of the code.
