@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="130.0" prefWidth="400.0" spacing="10.0" style="-fx-background-color: #F5EFE6; -fx-border-color: #3E2723; -fx-border-width: 1; -fx-background-radius: 4; -fx-border-radius: 4;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.SearchPaneController">
+    <padding>
+        <Insets bottom="12.0" left="15.0" right="15.0" top="12.0" />
+    </padding>
+    <children>
+        <Label text="Vehicle Finder" textFill="#3E2723">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Label>
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <children>
+                <TextField fx:id="searchTextField" promptText="Enter Plate Number..." HBox.hgrow="ALWAYS" style="-fx-border-color: #D7CCC8;" />
+                <Button mnemonicParsing="false" onAction="#handleSearch" style="-fx-background-color: #C9985C; -fx-text-fill: #3E2723; -fx-font-weight: bold;" text="Search" />
+            </children>
+        </HBox>
+        <Label fx:id="resultLabel" text="Enter a plate number to locate the vehicle." textFill="#6D4C41">
+            <font>
+                <Font name="System Italic" size="13.0" />
+            </font>
+            <padding>
+                <Insets top="5.0" />
+            </padding>
+        </Label>
+    </children>
+</VBox>

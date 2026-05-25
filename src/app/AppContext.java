@@ -1,4 +1,3 @@
-// app/AppContext.java
 package app;
 
 import managers.GateManager;
@@ -27,6 +26,9 @@ public class AppContext {
     private final RecordManager recordManager;
     private final SearchManager searchManager;
     private final HashMapManager hashMapManager;
+
+    // Main controller reference for cross-panel UI communication
+    private controllers.MainController mainController;
 
     public AppContext() {
         // 1. Initialize base managers first (assuming default constructors)
@@ -78,4 +80,13 @@ public class AppContext {
     public RecordManager getRecordManager() { return recordManager; }
     public SearchManager getSearchManager() { return searchManager; }
     public HashMapManager getHashMapManager() { return hashMapManager; }
+    
+
+    public void setMainController(controllers.MainController mainController) {
+    this.mainController = mainController;
+    }
+
+    public controllers.MainController getMainController() {
+        return mainController;
+    }
 }

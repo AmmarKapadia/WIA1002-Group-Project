@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.geometry.Insets?>
 
-<BorderPane stylesheets="@../css/styles.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
+<BorderPane prefHeight="720.0" prefWidth="1200.0" style="-fx-background-color: #FBF7F0;"
+            xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainController">
+   <padding>
+       <Insets top="15" right="15" bottom="15" left="15"/>
+   </padding>
 
-    <center>
-        <VBox spacing="10">
-            <HBox spacing="10">
-                <fx:include source="ActionPane.fxml" />
-                <fx:include source="SearchPane.fxml" />
-            </HBox>
-            <fx:include source="MapPane.fxml" />
-        </VBox>
-    </center>
+   <top>
+       <HBox spacing="15" BorderPane.alignment="CENTER">
+           <padding><Insets bottom="15"/></padding>
+           <fx:include fx:id="actionPane" source="ActionPane.fxml" HBox.hgrow="ALWAYS"/>
+           <fx:include fx:id="searchPane" source="SearchPane.fxml" HBox.hgrow="ALWAYS"/>
+       </HBox>
+   </top>
 
-    <right>
-        <VBox spacing="10">
-            <fx:include source="StatsPane.fxml" />
-            <fx:include source="HistoryPane.fxml" />
-        </VBox>
-    </right>
+   <center>
+       <StackPane style="-fx-background-color: #F5EFE6; -fx-border-color: #3E2723; -fx-border-width: 1; -fx-border-radius: 4;" BorderPane.alignment="CENTER">
+           <fx:include fx:id="mapPane" source="MapPane.fxml"/>
+       </StackPane>
+   </center>
+
+   <right>
+       <VBox spacing="15" prefWidth="320.0" minWidth="320.0" BorderPane.alignment="CENTER">
+           <padding><Insets left="15"/></padding>
+           <fx:include fx:id="statsPane" source="StatsPane.fxml"/>
+           <fx:include fx:id="historyPane" source="HistoryPane.fxml" VBox.vgrow="ALWAYS"/>
+       </VBox>
+   </right>
 </BorderPane>

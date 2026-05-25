@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="130.0" prefWidth="400.0" spacing="10.0" style="-fx-background-color: #F5EFE6; -fx-border-color: #3E2723; -fx-border-width: 1; -fx-background-radius: 4; -fx-border-radius: 4;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.ActionPaneController">
+    <padding>
+        <Insets bottom="12.0" left="15.0" right="15.0" top="12.0" />
+    </padding>
+    <children>
+        <Label text="Gate Operations" textFill="#3E2723">
+            <font>
+                <Font name="System Bold" size="16.0" />
+            </font>
+        </Label>
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <children>
+                <Label text="Plate Number:" textFill="#3E2723" minWidth="100">
+                    <font>
+                        <Font size="13.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="plateTextField" promptText="e.g. WBA1234" HBox.hgrow="ALWAYS" style="-fx-border-color: #D7CCC8;" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <children>
+                <Label text="Owner Name:" textFill="#3E2723" minWidth="100">
+                    <font>
+                        <Font size="13.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="ownerTextField" promptText="e.g. Alice Tan" HBox.hgrow="ALWAYS" style="-fx-border-color: #D7CCC8;" />
+            </children>
+        </HBox>
+        <HBox spacing="15.0" alignment="CENTER_RIGHT">
+            <children>
+                <Button mnemonicParsing="false" onAction="#handleEntry" prefWidth="120.0" style="-fx-background-color: #3E2723; -fx-text-fill: #F5EFE6; -fx-font-weight: bold;" text="Process Entry" />
+                <Button mnemonicParsing="false" onAction="#handleExit" prefWidth="120.0" style="-fx-background-color: #7B5E57; -fx-text-fill: #F5EFE6; -fx-font-weight: bold;" text="Process Exit" />
+            </children>
+        </HBox>
+    </children>
+</VBox>
