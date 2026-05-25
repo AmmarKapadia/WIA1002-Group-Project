@@ -181,8 +181,13 @@ This project was developed across four sprints over the course of the semester:
 ## Course Info
 
 **Course:** WIA1002 — Data Structures  
-**Institution:** Universiti Malaya  
+
+**Institution:** Universiti Malaya   
+
 **Academic Session:** 2025/2026 Semester 2  
+
 **Tutor:** Prof. Muhammad Lubani  
+
 **Demonstator:** Mohammad Shahid Akhtar  
+
 ---
