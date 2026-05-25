@@ -30,22 +30,20 @@ public class ActionPaneController {
         // 2. Schedule the processing of the current queued vehicle (assign it to a parking slot)
         Vehicle processedVehicle = context.getGateManager().processNextArrival();
 
-        // 3. Check if the vehicle was successfully parked (processedVehicle might be null if slots are full)
+        // 3. Refresh ALL panels FIRST so the map redraws cleanly (slot flips chocolate, stats update)
+        if (context.getMainController() != null) {
+            context.getMainController().refreshAll();
+        }
+
+        // 4. NOW draw the highlight on top of the refreshed map — it will stay visible for 5 seconds
         if (processedVehicle != null && processedVehicle.getAssignedSlot() != null) {
             String targetSlotID = processedVehicle.getAssignedSlot().getSlotID();
-            
-            // 4. Calculate the shortest path from the GATE to the target slot (corrected to getRoute)
             Route route = context.getRouteManager().getRoute(targetSlotID);
-            
             if (context.getMainController() != null && route != null) {
                 context.getMainController().showRoute(route);
             }
         }
 
-        // 5. Notify all panels to refresh the UI
-        if (context.getMainController() != null) {
-            context.getMainController().refreshAll();
-        }
         plateTextField.clear();
     }
 
