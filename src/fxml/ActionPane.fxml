@@ -20,12 +20,22 @@
         </Label>
         <HBox alignment="CENTER_LEFT" spacing="10.0">
             <children>
-                <Label text="Plate Number:" textFill="#3E2723">
+                <Label text="Plate Number:" textFill="#3E2723" minWidth="100">
                     <font>
                         <Font size="13.0" />
                     </font>
                 </Label>
                 <TextField fx:id="plateTextField" promptText="e.g. WBA1234" HBox.hgrow="ALWAYS" style="-fx-border-color: #D7CCC8;" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER_LEFT" spacing="10.0">
+            <children>
+                <Label text="Owner Name:" textFill="#3E2723" minWidth="100">
+                    <font>
+                        <Font size="13.0" />
+                    </font>
+                </Label>
+                <TextField fx:id="ownerTextField" promptText="e.g. Alice Tan" HBox.hgrow="ALWAYS" style="-fx-border-color: #D7CCC8;" />
             </children>
         </HBox>
         <HBox spacing="15.0" alignment="CENTER_RIGHT">
