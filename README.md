@@ -160,7 +160,7 @@ test/                     # JUnit test suite (Sprint 4)
 | Role | Member | Domain |
 |---|---|---|
 | Member 1 | **Ammar Kapadia** | HashMap + StatsManager (statistics dashboard) |
-| Member 2 | **Nicolas** | Graph + Edges (parking map rendering) |
+| Member 2 | **Nicolas Nicodemus** | Graph + Edges (parking map rendering) |
 | Member 3 | **Sun Chengyang** | Queue + Stack + HistoryManager (undo logic) |
 | Member 4 | **Yim Zi Hao** | MinHeap + Dijkstra (slot assignment + routing) |
 | Member 5 | **Xu Zimao** | AVL Tree + SearchManager + JavaFX integration |
