@@ -7,7 +7,7 @@ import models.Vehicle; // Assuming Vehicle is in the models package
  * Ensures O(log n) performance by maintaining a balance factor between [-1, 1].
  */
 public class CustomAVL {
-
+    
     private class Node {
         Vehicle vehicle;
         int height;
