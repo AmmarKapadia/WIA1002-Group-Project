@@ -41,7 +41,7 @@
         <HBox spacing="15.0" alignment="CENTER_RIGHT">
             <children>
                 <Button mnemonicParsing="false" onAction="#handleEntry" prefWidth="120.0" style="-fx-background-color: #3E2723; -fx-text-fill: #F5EFE6; -fx-font-weight: bold;" text="Process Entry" />
-                <Button mnemonicParsing="false" onAction="#handleExit" prefWidth="120.0" style="-fx-background-color: #7B5E57; -fx-text-fill: #F5EFE6; -fx-font-weight: bold;" text="Process Exit" />
+                <Button mnemonicParsing="false" onAction="#handleExit" prefWidth="120.0" style="-fx-background-color: #3E2723; -fx-text-fill: #F5EFE6; -fx-font-weight: bold;" text="Process Exit" />
             </children>
         </HBox>
         <Label fx:id="statusLabel" text="" wrapText="true" />

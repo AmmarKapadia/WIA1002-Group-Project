@@ -57,6 +57,11 @@ public class GateManager {
     // =========================================================
 
     public void addVehicleToQueue(Vehicle v) {
+        // Reject duplicate plates — vehicle already parked
+        if (hashMapManager.isParked(v.getLicensePlate())) {
+            System.out.println("Vehicle[" + v.getLicensePlate() + "] is already parked. Duplicate entry rejected.");
+            return;
+        }
 
         waitingQueue.enqueue(v);
 

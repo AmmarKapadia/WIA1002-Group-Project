@@ -27,6 +27,13 @@ public class ActionPaneController {
             setStatus("Plate and owner name are both required.", "status-error");
             return;
         }
+        
+        if (context.getHashMapManager().isParked(plate)) {
+            setStatus("Vehicle " + plate + " is already parked.", "status-error");
+            plateTextField.clear();
+            ownerTextField.clear();
+            return;
+        }
 
         Vehicle newVehicle = new Vehicle(plate, owner, System.currentTimeMillis());
         context.getGateManager().addVehicleToQueue(newVehicle);
